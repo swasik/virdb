@@ -1,0 +1,22 @@
+s=0;
+rT=1.1;
+Tmax=1.2*^7;
+dT=0.012;
+eta=0;
+beta = 2.8*^-8;
+q=0.0;
+rI=0.26;
+dI=0.13;
+c=5.4;
+p=13.2;
+epsil=0.996;
+sol=NDSolve[{T'[t]==s+rT T[t](1-(T[t]+IN[t])/Tmax)-dT T[t]-(1-eta) beta VIR[t] T[t]+q IN[t],
+IN'[t]==rI IN[t](1-(T[t]+IN[t])/Tmax)-dI IN[t]+(1-eta) beta VIR[t] T[t]-q IN[t],
+VIR'[t]==(1-epsil)p IN[t] - c VIR[t],T[0]==2.9*^5,IN[0]==6.61*^6,VIR[0]==1.6*^7},
+{T,IN,VIR},
+{t,0,100}]
+RNA[t_] = VIR[t]/.sol[[1]][[3]];
+
+
+RNA/@{0,0.396,0.982,1.2988,1.9958,2.9937,3.9916,5.0845,5.9873,7.0011,9.8838,14.0813,17.0116,20.8765,27.9884}
+LogPlot[Evaluate[{T[t], IN[t], VIR[t]} /. sol], {t, 0,30}, PlotStyle->Automatic, PlotLegends->{"Uninfected (T)", "Infected (I)", "Virus (V)"}, PlotTheme->"Bussines"]
